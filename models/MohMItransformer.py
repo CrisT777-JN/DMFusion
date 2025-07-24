@@ -12,7 +12,7 @@ from models.FMoEGate import FusedMoEGate,SparseDispatcher,GatingFusionMoEGate
 
 class DepthwiseSeparableConv(nn.Module):
 
-    def __init__(self, in_channels, out_channels, kernel_size, padding, bias=False): # 通常 DSC 不用偏置
+    def __init__(self, in_channels, out_channels, kernel_size, padding, bias=False): 
         super().__init__()
         self.depthwise = nn.Conv2d(in_channels, in_channels, kernel_size=kernel_size,
                                    padding=padding, groups=in_channels, bias=bias)
@@ -178,9 +178,8 @@ class MoEFeedForward(nn.Module):
         super(MoEFeedForward, self).__init__()
         self.num_experts = num_experts
         self.top_k = top_k
-        self.noise_std = noise_std  # 噪声标准差
+        self.noise_std = noise_std  
 
-        # 定义多个专家，每个专家是 (B, C, W, H) -> (B, C, W, H)
         self.experts = nn.ModuleList([
             nn.Sequential(
                 nn.Conv2d(dim, dim, kernel_size=3, padding=1),
