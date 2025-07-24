@@ -12,13 +12,13 @@ for i = 1 : length(names)
     row = rows(i);
     row_name = strrep(row_name1, 'row', row);
     row_data = strrep(row_data1, 'row', row);
-    fileFolder=fullfile('E:\xianyu2025_E\code-25.2\test_data\', dataset, '\ours_ir'); % æºå›¾åƒAæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\ir'
+    fileFolder=fullfile('', dataset, '\ours_ir'); % æºå›¾åƒAæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\ir'
     dirOutput=dir(fullfile(fileFolder,'*.*'));
     fileNames = {dirOutput.name};
     [m, num] = size(fileNames);   
     ir_dir = fullfile(' ',dataset, '\MRI'); % æºå›¾åƒAæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\ir'
     vi_dir = fullfile('',dataset, '\PET'); % æºå›¾åƒBæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\vi'
-    Fused_dir = fullfile('E:\xianyu2025_E\code-25.2\test_data\',dataset, cell2mat(names(i)));
+    Fused_dir = fullfile('',dataset, cell2mat(names(i)));
     %Fused_dir = fullfile(Fused_dir, 'Image', 'Algorithm', strcat(cell2mat(names(i)), '_', dataset)); % èžåˆç»“æžœæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜? 'Evaluation\Image\Algorithm\DenseFuse_TNO'
     EN_set = [];    SF_set = [];SD_set = [];PSNR_set = [];
     MSE_set = [];MI_set = [];VIF_set = []; AG_set = [];
