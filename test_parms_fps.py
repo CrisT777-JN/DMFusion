@@ -33,7 +33,6 @@ def init_seeds(seed=0):
         torch.cuda.manual_seed(seed)
     cudnn.benchmark, cudnn.deterministic = (False, True) if seed == 0 else (True, False)
 
-# --- Checkpoint 加载函数 ---
 
 if __name__ == '__main__':
     dataset = 'test_data/LLVIP'
