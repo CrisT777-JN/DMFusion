@@ -3,7 +3,7 @@ clear all
 %names = {'ours_ir'}
 names={'CAMF_','PIAFusion','SuperFusion','SwinFusion','UMF-CMGR','TextIF','DAFusion','GIFNet','ours_ir'}
 rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J','K','L','M','N','O','P'] ;
-easy = 1; %% easy=1 用于测试：EN, SF,SD,PSNR,MSE, MI, VIF, AG, CC, SCD, Qabf等指标； easy=0 用于测试：Nabf, SSIM, MS_SSIM, FMI_pixel, FMI_dct, FMI_w等指�?
+easy = 1; %% easy=1 ç”¨äºŽæµ‹è¯•ï¼šEN, SF,SD,PSNR,MSE, MI, VIF, AG, CC, SCD, Qabfç­‰æŒ‡æ ‡ï¼› easy=0 ç”¨äºŽæµ‹è¯•ï¼šNabf, SSIM, MS_SSIM, FMI_pixel, FMI_dct, FMI_wç­‰æŒ‡æ ?
 dataset = 'PET-MRI-low-contrast'
 row_name1 = 'row1';
 row_data1 = 'row2';
@@ -12,14 +12,14 @@ for i = 1 : length(names)
     row = rows(i);
     row_name = strrep(row_name1, 'row', row);
     row_data = strrep(row_data1, 'row', row);
-    fileFolder=fullfile('E:\xianyu2025_E\code-25.2\test_data\', dataset, '\ours_ir'); % 源图像A�?在文件夹 此处�?'Evaluation\Image\Source-Image\TNO\ir'
+    fileFolder=fullfile('E:\xianyu2025_E\code-25.2\test_data\', dataset, '\ours_ir'); % æºå›¾åƒAæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\ir'
     dirOutput=dir(fullfile(fileFolder,'*.*'));
     fileNames = {dirOutput.name};
     [m, num] = size(fileNames);   
-    ir_dir = fullfile('E:\xianyu2025_E\code-25.2\test_data\',dataset, '\MRI'); % 源图像A�?在文件夹 此处�?'Evaluation\Image\Source-Image\TNO\ir'
-    vi_dir = fullfile('E:\xianyu2025_E\code-25.2\test_data\',dataset, '\PET'); % 源图像B�?在文件夹 此处�?'Evaluation\Image\Source-Image\TNO\vi'
+    ir_dir = fullfile(' ',dataset, '\MRI'); % æºå›¾åƒAæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\ir'
+    vi_dir = fullfile('',dataset, '\PET'); % æºå›¾åƒBæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜?'Evaluation\Image\Source-Image\TNO\vi'
     Fused_dir = fullfile('E:\xianyu2025_E\code-25.2\test_data\',dataset, cell2mat(names(i)));
-    %Fused_dir = fullfile(Fused_dir, 'Image', 'Algorithm', strcat(cell2mat(names(i)), '_', dataset)); % 融合结果�?在文件夹 此处�? 'Evaluation\Image\Algorithm\DenseFuse_TNO'
+    %Fused_dir = fullfile(Fused_dir, 'Image', 'Algorithm', strcat(cell2mat(names(i)), '_', dataset)); % èžåˆç»“æžœæ‰?åœ¨æ–‡ä»¶å¤¹ æ­¤å¤„æ˜? 'Evaluation\Image\Algorithm\DenseFuse_TNO'
     EN_set = [];    SF_set = [];SD_set = [];PSNR_set = [];
     MSE_set = [];MI_set = [];VIF_set = []; AG_set = [];
     CC_set = [];SCD_set = []; Qabf_set = [];
@@ -70,12 +70,12 @@ for i = 1 : length(names)
             fprintf('Fusion Method:%s, Image Name: %s\n', cell2mat(names(i)), fileNames{j})
         end
     end
-    save_dir = '../Metric'; %存放Excel结果的文件夹
+    save_dir = '../Metric'; %å­˜æ”¾Excelç»“æžœçš„æ–‡ä»¶å¤¹
     if exist(save_dir,'dir')==0
         mkdir(save_dir);
     end
-    %% 将测试结果写�? Excel�? 此处采用writetable�? 第一行可能会有问题，算法名在第二行，评估结果从第三行�?�?
-    file_name = fullfile(save_dir, strcat('Metric_', dataset, '.xlsx')); %存放Excel文件的文件名
+    %% å°†æµ‹è¯•ç»“æžœå†™å…? Excelï¼? æ­¤å¤„é‡‡ç”¨writetableï¼? ç¬¬ä¸€è¡Œå¯èƒ½ä¼šæœ‰é—®é¢˜ï¼Œç®—æ³•ååœ¨ç¬¬äºŒè¡Œï¼Œè¯„ä¼°ç»“æžœä»Žç¬¬ä¸‰è¡Œå¼?å§?
+    file_name = fullfile(save_dir, strcat('Metric_', dataset, '.xlsx')); %å­˜æ”¾Excelæ–‡ä»¶çš„æ–‡ä»¶å
     if easy ==1
         SD_table = table(SD_set');
         PSNR_table = table(PSNR_set');
