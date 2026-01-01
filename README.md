@@ -1,9 +1,5 @@
 # DMFusion
 
-Source code of the paper 
-
-$$\textit{DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion}$$ 
-
 # Setup
 
 ```bash
