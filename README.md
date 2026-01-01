@@ -38,6 +38,9 @@ runs/
 ├── F_Base.pth     # restoration branch weights
 └── F.pth          # fusion network weights
 ```
+We provide the pre-trained models (checkpoints) for datasets to facilitate reproduction.
+
+- **Google Drive**: [Download Link](https://drive.google.com/drive/folders/1XkZGUvEBA0DffiiHUTuEz_hTMOkMLWjF?usp=sharing)
 
 
 
