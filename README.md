@@ -2,7 +2,7 @@
 
 Source code of the paper 
 
-$$\textit{Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion}$$ 
+$$\textit{DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion}$$ 
 
 # Setup
 
