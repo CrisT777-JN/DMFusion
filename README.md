@@ -14,7 +14,6 @@ pip install torchvision==0.19.1
 pip install tqdm==4.67.1
 pip install timm==1.0.19
 pip install einops==0.8.1
-pip install clip==0.2.0
 pip install git+https://github.com/openai/CLIP.git
 ```
 
