@@ -1,5 +1,5 @@
-# DMFusion
-
+# DMFusion (IEEE T-CSVT2026)
+DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion
 # Setup
 
 ```bash
@@ -51,3 +51,19 @@ If you want to infer with our DMFusion and obtain the fusion results in our pape
 Then, the fused results will be saved in the `./test_data/output_fx/` folder, the repaired infrared images will be saved in the `./test_data/output_ir/` folder, and the repaired visible light images will be saved in the `./test_data/output_vi/` folder.
 
 If you just want to quickly test our fusion results, you can choose to run `test_params_fps.py` for a faster test.
+
+# Citation
+
+If you find our work useful in your research, please consider citing:
+
+```bibtex
+@ARTICLE{Chen2026DMFusion,
+  author={Chen, Tao and Wang, Chuang and Zhang, Yudong and Xia, Kaijian and Qian, Pengjiang},
+  journal={IEEE Transactions on Circuits and Systems for Video Technology}, 
+  title={DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion}, 
+  year={2026},
+  volume={},
+  number={},
+  pages={1-16},
+}
+```
