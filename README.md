@@ -42,7 +42,18 @@ We provide the pre-trained models (checkpoints) for datasets to facilitate repro
 
 - **Google Drive**: [Download Link](https://drive.google.com/drive/folders/1XkZGUvEBA0DffiiHUTuEz_hTMOkMLWjF?usp=sharing)
 
+# Training
 
+The training process consists of two stages:
+
+**Stage 1:**
+```bash
+python train_main0.py
+```
+**Stage 2:**
+```bash
+python train_main1.py
+```
 
 # Testing
 
