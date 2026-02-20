@@ -12,7 +12,6 @@ import torch.nn as nn
 from data_loader.msrs_data1 import MSRS_data
 from models.common import gradient, clamp
 from models.vir_branch import Fusion
-from models.cls_model import LoraCLIP  # 导入LoraCLIP用于创建不同rank的模型
 from pytorch_msssim import ssim
 from models.common import RGB2YCrCb
 criterion = nn.CrossEntropyLoss()
@@ -26,17 +25,13 @@ criterion = nn.CrossEntropyLoss()
 #     cudnn.benchmark, cudnn.deterministic = (False, True) if seed == 0 else (True, False)
 
 if __name__ == '__main__':
-    # ========== 可配置参数 ==========
-    lora_rank = 8  # 在这里修改 LoRA Rank，必须与 train_main0.py 中的 rank 一致！
-    # ================================
-    
     train_dataset_path = 'datasets1'
     train_dataset_path_hav = 'Havard-noise'
     batch_size = 1
     workers = 1
     lr = 0.0001
     epochs = 500
-    save_path = f'runs/rank_{lora_rank}'  # 根据rank创建不同的保存目录
+    save_path = 'runs'
 
     train_dataset = MSRS_data(train_dataset_path, task=0)
     train_dataset_hav = MSRS_data(train_dataset_path_hav, task=1)
@@ -58,7 +53,7 @@ if __name__ == '__main__':
         os.makedirs(save_path)
 
     model = Fusion()
-    model.load_state_dict(torch.load(f'{save_path}/F_base.pth'))
+    model.load_state_dict(torch.load('runs/F_base.pth'))
     for param in model.encode.parameters():
         param.requires_grad = False
     for param in model.decode_vi.parameters():
@@ -66,32 +61,9 @@ if __name__ == '__main__':
     for param in model.decode_ir.parameters():
         param.requires_grad = False
     model = model.cuda()
-    
-    # ========== 创建CLIP模型（支持不同LoRA rank）============
-    cls_model_path = './best_cls.pth'
-    
-    # 如果 rank=4 且预训练模型存在，直接加载
-    if lora_rank == 4 and os.path.exists(cls_model_path):
-        print(f"加载预训练CLIP模型 (rank={lora_rank})")
-        cls_model = torch.load(cls_model_path, weights_only=False)
-        cls_model.cuda()
-        cls_model.eval()
-    else:
-        # 创建新模型（指定rank）
-        print(f"创建新的CLIP模型 (rank={lora_rank})")
-        cls_model = LoraCLIP(num_classes=9, r=lora_rank, pretrained=True)
-        cls_model.cuda()
-        cls_model.eval()
-        
-        # 如果 rank=4，尝试加载预训练权重（兼容性加载）
-        if lora_rank == 4 and os.path.exists(cls_model_path):
-            try:
-                pretrained_model = torch.load(cls_model_path, weights_only=False)
-                cls_model.load_state_dict(pretrained_model.state_dict(), strict=False)
-                print(f"已加载预训练CLIP模型权重 (rank={lora_rank})")
-            except Exception as e:
-                print(f"无法加载预训练权重，使用新初始化的模型: {e}")
-    # ========================================================
+    cls_model = torch.load('./best_cls.pth')
+    cls_model.cuda()
+    cls_model.eval()
 
     optimizer = optim.Adam(model.parameters(), lr=lr)
     for epoch in range(epochs):
@@ -198,53 +170,6 @@ if __name__ == '__main__':
                                    #loss_fi_3=loss_fi_3.item(),
                                    loss_mi=loss_mi.item(),
                                    loss_total=loss.item())
-        # train_tqdm2 = tqdm(train_loader_hav, total=len(train_loader_hav_noi))
-        # for vis_image, inf_image, vis_gt, inf_gt, [vis_image_clip, inf_image_clip], name in train_tqdm2:
-        #     vis_image = vis_image.cuda()
-        #     inf_image = inf_image.cuda()
-        #     vis_gt = vis_gt.cuda()
-        #     inf_gt = inf_gt.cuda()
-        #     vis_image_clip = vis_image_clip.cuda()
-        #     inf_image_clip = inf_image_clip.cuda()
-        #     _, c, _, _ = inf_image_clip.shape
-        #     if c==1:
-        #         inf_image_clip = torch.cat([inf_image_clip]*3, dim=1)
-        #     _, c, _, _ = vis_image_clip.shape
-        #     if c == 1:
-        #         vis_image_clip = torch.cat([vis_image_clip] * 3, dim=1)
-        #     _, feature_vis = cls_model(vis_image_clip)
-        #     _, feature_inf = cls_model(inf_image_clip)
-        #     feature = feature_vis * feature_inf
-        #
-        #     optimizer.zero_grad()
-        #
-        #     vi_r, ir_r, fx_vi_branch, loss_mi = model(vis_image, inf_image, feature)
-        #     #print(vi_r.shape, ir_r.shape, vis_gt.shape, vis_image.shape)
-        #     # 先写重建损失
-        #     #loss_re = F.l1_loss(vi_r, vis_gt) + F.l1_loss(ir_r, inf_gt)
-        #     # 融合损失
-        #     #loss_fi_1 = F.l1_loss(gradient(fx_ir_branch), torch.max(gradient(vis_gt), gradient((inf_gt))))
-        #     loss_fi_gard = F.l1_loss(gradient(fx_vi_branch), torch.max(gradient(vis_gt), gradient(inf_gt)))
-        #     loss_fi_ssim = 2 - ssim(fx_vi_branch, vis_gt) - ssim(fx_vi_branch, inf_gt)
-        #     loss_fi_pix = F.l1_loss(fx_vi_branch, torch.max(vis_gt, inf_gt))
-        #
-        #
-        #     loss_fi = 50*loss_fi_gard + 10*loss_fi_ssim + 20*loss_fi_pix
-        #
-        #     # 总损失
-        #     #loss = 10 *loss_re + loss_fi + 0.01 * loss_mi
-        #     loss = loss_fi + 0.01 * loss_mi
-        #
-        #     loss.backward()
-        #     optimizer.step()
-        #
-        #     train_tqdm2.set_postfix(epoch=epoch,
-        #                            #loss_re=10*loss_re.item(),
-        #                            #loss_fi_1=50*loss_fi_1.item(),
-        #                            #loss_fi_2=50*loss_fi_2.item(),
-        #                            loss_fi=loss_fi.item(),
-        #                            #loss_fi_3=loss_fi_3.item(),
-        #                            loss_mi=loss_mi.item(),
-        #                            loss_total=loss.item())
+
 
         torch.save(model.state_dict(), f'{save_path}/F.pth')
