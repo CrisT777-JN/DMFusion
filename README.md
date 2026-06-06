@@ -1,5 +1,6 @@
 # DMFusion (IEEE T-CSVT2026)
 DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion
+([Paper Link](https://ieeexplore.ieee.org/abstract/document/11373189))
 # Setup
 
 ```bash
@@ -73,8 +74,8 @@ If you find our work useful in your research, please consider citing:
   journal={IEEE Transactions on Circuits and Systems for Video Technology}, 
   title={DMFusion: Degradation-Customized Mixture-of-Experts with Adaptive Discrimination for Multi-Modal Image Fusion}, 
   year={2026},
-  volume={},
-  number={},
-  pages={1-16},
+  volume={36},
+  number={6},
+  pages={8506-8521},
 }
 ```
